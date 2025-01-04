@@ -37,3 +37,19 @@
     python -m venv venv
     source venv/bin/activate  # для Linux/macOS
     venv\Scripts\activate     # для Windows
+   2. Створення та активація віртуального середовища:
+    
+    python -m venv venv
+    source venv/bin/activate  # для Linux/macOS
+    venv\Scripts\activate     # для Windows
+    
+
+3. Встановлення залежностей:
+    
+    pip install -r requirements.txt
+    
+
+4. Запуск системи:
+    
+    python app.py
+    
