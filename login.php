@@ -28,7 +28,7 @@ if (isset($_POST['login'])) {
             }
             exit();
         } else {
-            $error_message = "Невірний пароль.";
+            $error_message = "Некоректний пароль.";
         }
     } else {
         $error_message = "Користувача не знайдено.";
