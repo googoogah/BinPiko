@@ -4,7 +4,7 @@ if (!isset($_SESSION['user']) || $_SESSION['role'] != 'user') {
     header("Location: login.php");
     exit();
 }
-include 'db.php'; // Підключення до бази даних
+include 'db.php'; //Підключення до бази даних
 ?>
 
 <!DOCTYPE html>
