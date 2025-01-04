@@ -14,7 +14,7 @@ plt.rcParams.update({'figure.max_open_warning': 0})
 def get_db_connection():
     """
     Встановлює з'єднання з базою даних MySQL.
-    Повертає об'єкт з'єднання або None у випадку помилки.
+    Повертає об'єкт з'єднання або none у випадку помилки.
     """
     try:
         connection = mysql.connector.connect(**config.DB_CONFIG)
