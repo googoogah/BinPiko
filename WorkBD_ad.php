@@ -71,6 +71,41 @@ if (isset($_POST['edit_record'])) {
     <main>
         <h1>Керування даними</h1>
 
+        <div class="table-container">
+            <h2>Таблиця статусів</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Статус ID</th>
+                        <th>Статус</th>
+                        <th>Опис</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td>Нормальна робота</td>
+                        <td>Сила струму від 8.1 до 15.0 A</td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>Перевантаження</td>
+                        <td>Сила струму більше 15.0 A</td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td>Розрив</td>
+                        <td>Сила струму = 0 A</td>
+                    </tr>
+                    <tr>
+                        <td>4</td>
+                        <td>Нестача</td>
+                        <td>Сила струму від 0.1 до 8.0 A</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
         <div class="form-container">
             <h2>Додати запис</h2>
             <form method="POST">
