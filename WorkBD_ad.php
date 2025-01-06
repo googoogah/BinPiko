@@ -23,6 +23,28 @@ if (isset($_POST['add_record'])) {
     $status_id = $_POST['status_id'];
     $remarks = $_POST['remarks'];
 
+    // Автоматичне визначення статусу та приміток, якщо вони не вказані
+    if (empty($status_id) || empty($remarks)) {
+        if ($current_strength == 0) {
+            $status_id = 3;
+            $remarks = "Розрив";
+        } elseif ($current_strength >= 0.1 && $current_strength <= 8.0) {
+            $status_id = 4;
+            $remarks = "Нестача";
+        } elseif ($current_strength >= 8.1 && $current_strength <= 15.0) {
+            $status_id = 1;
+            $remarks = "Нормальна робота";
+        } elseif ($current_strength >= 15.1) {
+            $status_id = 2;
+            $remarks = "Перевантаження";
+        } else {
+            $status_id = null;
+            $remarks = "Невизначений статус";
+        }
+    } else {
+        $remarks .= " (введено вручну)";
+    }
+
     $sql = "INSERT INTO line_current_readings (line_id, scan_time, current_strength, status_id, remarks) VALUES (?, ?, ?, ?, ?)";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("isdss", $line_id, $scan_time, $current_strength, $status_id, $remarks);
@@ -119,7 +141,7 @@ if (isset($_POST['edit_record'])) {
                 <input type="number" step="0.01" id="current_strength" name="current_strength" required>
 
                 <label for="status_id">Статус:</label>
-                <input type="number" id="status_id" name="status_id" required>
+                <input type="number" id="status_id" name="status_id">
 
                 <label for="remarks">Примітки:</label>
                 <input type="text" id="remarks" name="remarks">
