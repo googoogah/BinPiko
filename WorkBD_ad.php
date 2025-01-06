@@ -20,11 +20,12 @@ if (isset($_POST['add_record'])) {
     $line_id = $_POST['line_id'];
     $scan_time = $_POST['scan_time'];
     $current_strength = $_POST['current_strength'];
+    $status_id = $_POST['status_id'];
     $remarks = $_POST['remarks'];
 
-    $sql = "INSERT INTO line_current_readings (line_id, scan_time, current_strength, remarks) VALUES (?, ?, ?, ?)";
+    $sql = "INSERT INTO line_current_readings (line_id, scan_time, current_strength, status_id, remarks) VALUES (?, ?, ?, ?, ?)";
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param("isds", $line_id, $scan_time, $current_strength, $remarks);
+    $stmt->bind_param("isdss", $line_id, $scan_time, $current_strength, $status_id, $remarks);
     $stmt->execute();
 }
 
@@ -34,11 +35,12 @@ if (isset($_POST['edit_record'])) {
     $line_id = $_POST['line_id'];
     $scan_time = $_POST['scan_time'];
     $current_strength = $_POST['current_strength'];
+    $status_id = $_POST['status_id'];
     $remarks = $_POST['remarks'];
 
-    $sql = "UPDATE line_current_readings SET line_id = ?, scan_time = ?, current_strength = ?, remarks = ? WHERE id = ?";
+    $sql = "UPDATE line_current_readings SET line_id = ?, scan_time = ?, current_strength = ?, status_id = ?, remarks = ? WHERE id = ?";
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param("isdsi", $line_id, $scan_time, $current_strength, $remarks, $id);
+    $stmt->bind_param("isdssi", $line_id, $scan_time, $current_strength, $status_id, $remarks, $id);
     $stmt->execute();
 }
 ?>
@@ -81,6 +83,9 @@ if (isset($_POST['edit_record'])) {
                 <label for="current_strength">Сила струму (A):</label>
                 <input type="number" step="0.01" id="current_strength" name="current_strength" required>
 
+                <label for="status_id">Статус:</label>
+                <input type="number" id="status_id" name="status_id" required>
+
                 <label for="remarks">Примітки:</label>
                 <input type="text" id="remarks" name="remarks">
 
@@ -97,13 +102,14 @@ if (isset($_POST['edit_record'])) {
                         <th>Лінія</th>
                         <th>Час сканування</th>
                         <th>Сила струму (A)</th>
+                        <th>Статус</th>
                         <th>Примітки</th>
                         <th>Дії</th>
                     </tr>
                 </thead>
                 <tbody>
                     <?php
-                    $query = "SELECT lr.id, ln.line_number, lr.scan_time, lr.current_strength, lr.remarks
+                    $query = "SELECT lr.id, ln.line_number, lr.scan_time, lr.current_strength, lr.status_id, lr.remarks
                               FROM line_current_readings lr
                               JOIN `lines` ln ON lr.line_id = ln.id
                               ORDER BY lr.scan_time ASC";
@@ -116,6 +122,7 @@ if (isset($_POST['edit_record'])) {
                                 <td>Лінія {$row['line_number']}</td>
                                 <td>{$row['scan_time']}</td>
                                 <td>{$row['current_strength']}</td>
+                                <td>{$row['status_id']}</td>
                                 <td>{$row['remarks']}</td>
                                 <td>
                                     <form method='POST' style='display:inline-block;'>
@@ -126,7 +133,7 @@ if (isset($_POST['edit_record'])) {
                               </tr>";
                         }
                     } else {
-                        echo "<tr><td colspan='6'>Дані не знайдено</td></tr>";
+                        echo "<tr><td colspan='7'>Дані не знайдено</td></tr>";
                     }
                     ?>
                 </tbody>
