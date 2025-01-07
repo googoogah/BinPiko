@@ -18,12 +18,20 @@ if (isset($_GET['delete'])) {
 if (isset($_POST['add_user'])) {
     $name = $_POST['name'];
     $password = password_hash($_POST['password'], PASSWORD_BCRYPT);
-    $sql = "INSERT INTO users (name, password, role) VALUES ('$name', '$password', 'user')";
+    $role = $_POST['role'];  // Отримуємо роль з форми
 
-    if ($conn->query($sql) === TRUE) {
-        echo "<p style='color: green; text-align: center;'></p>";
+    // Перевірка, чи роль є 'admin' і чи користувач має права на додавання адміністраторів
+    if ($role == 'admin' && $_SESSION['role'] != 'admin') {
+        echo "<p style='color: red; text-align: center;'>У вас немає прав на додавання адміністратора.</p>";
     } else {
-        echo "<p style='color: red; text-align: center;'>Помилка: " . $conn->error . "</p>";
+        // Додаємо користувача в базу даних
+        $sql = "INSERT INTO users (name, password, role) VALUES ('$name', '$password', '$role')";
+
+        if ($conn->query($sql) === TRUE) {
+            echo "<p style='color: green; text-align: center;'>Користувача додано успішно!</p>";
+        } else {
+            echo "<p style='color: red; text-align: center;'>Помилка: " . $conn->error . "</p>";
+        }
     }
 }
 
@@ -31,6 +39,7 @@ if (isset($_POST['add_user'])) {
 $sql = "SELECT * FROM users WHERE role='user'";
 $result = $conn->query($sql);
 ?>
+
 <!DOCTYPE html>
 <html lang="uk">
 <head>
@@ -117,6 +126,12 @@ $result = $conn->query($sql);
 
                 <label for="password">Пароль:</label>
                 <input type="password" name="password" id="password" required>
+
+                <label for="role">Роль:</label>
+                <select name="role" id="role">
+                    <option value="user">Користувач</option>
+                    <option value="admin">Адмін</option>
+                </select>
 
                 <button type="submit" name="add_user">Додати</button>
             </form>
